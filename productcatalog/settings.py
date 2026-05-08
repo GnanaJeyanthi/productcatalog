@@ -1,4 +1,4 @@
-# D:\2312040-wfp\productcatalog_project\productcatalog\settings.py
+
 """
 Django settings for productcatalog project.
 
@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ok4qb&7cb@#w3vk@4sg(!!(ng32gz&8=w=kwvwt&*jjhn&ahwc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -148,7 +149,7 @@ CART_SESSION_ID = 'cart'
 
 # Razorpay Configuration
 RAZORPAY_KEY_ID = 'rzp_test_RbkQjexLuLpwLO'
-RAZORPAY_KEY_SECRET = 'ezLTmOeQn7eYEK047foaBAD3'
+#RAZORPAY_KEY_SECRET = 'ezLTmOeQn7eYEK047foaBAD3'
 
 # College Email Domains for Student Discounts
 COLLEGE_EMAIL_DOMAINS = [
@@ -177,4 +178,4 @@ COLLEGE_EMAIL_DOMAINS = [
 ]
 
 # Gemini AI settings
-GEMINI_API_KEY = 'AIzaSyDvOSLuGs-jEdN6Pc4KxHYG6oy9url6-kc'
+#GEMINI_API_KEY = 'AIzaSyDvOSLuGs-jEdN6Pc4KxHYG6oy9url6-kc'
