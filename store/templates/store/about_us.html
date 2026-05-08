@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid bg-gradient-primary py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh;">
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <div class="hero-content bg-white rounded-3 shadow-lg p-5 mb-4" style="border-radius: 20px !important;">
+                    <div class="mb-4">
+                        <i class="bi bi-shop display-1 text-primary"></i>
+                    </div>
+                    <h1 class="display-4 fw-bold text-dark mb-3">Welcome to ProductCatalog</h1>
+                    <p class="lead text-muted fs-5 mb-4">Your ultimate destination for premium electronics and tech gadgets</p>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- About Content -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg h-100" style="border-radius: 20px;">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-stars text-warning display-4"></i>
+                        </div>
+                        <h3 class="card-title text-center mb-3">Our Story</h3>
+                        <p class="card-text text-muted">
+                            Founded in 2019, ProductCatalog has been at the forefront of bringing cutting-edge technology
+                            to consumers worldwide. We started with a simple mission: to make premium electronics accessible
+                            to everyone while maintaining the highest standards of quality and customer service.
+                        </p>
+                        <p class="card-text text-muted">
+                            Over the years, we've grown from a small online store to a trusted marketplace featuring
+                            products from renowned brands like Apple, Samsung, Dell, HP, and many more. Our commitment
+                            to excellence has earned us the loyalty of over 50,000 satisfied customers.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg h-100" style="border-radius: 20px;">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-shield-check text-success display-4"></i>
+                        </div>
+                        <h3 class="card-title text-center mb-3">Our Commitment</h3>
+                        <p class="card-text text-muted">
+                            At ProductCatalog, we believe in transparency, authenticity, and customer satisfaction.
+                            Every product in our catalog undergoes rigorous quality checks to ensure you receive
+                            genuine, high-quality items that meet our strict standards.
+                        </p>
+                        <p class="card-text text-muted">
+                            We offer comprehensive warranties, secure payment options including Razorpay integration,
+                            and dedicated customer support to assist you throughout your shopping journey.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row g-4 mb-5">
+            <div class="col-12">
+                <h2 class="text-center text-white mb-4">Why Choose ProductCatalog?</h2>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card text-center bg-white p-4 rounded-3 shadow-lg h-100" style="border-radius: 20px !important;">
+                    <div class="mb-3">
+                        <i class="bi bi-truck text-primary display-4"></i>
+                    </div>
+                    <h5 class="card-title">Fast & Secure Delivery</h5>
+                    <p class="card-text text-muted">Quick delivery across India with real-time tracking and secure packaging.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card text-center bg-white p-4 rounded-3 shadow-lg h-100" style="border-radius: 20px !important;">
+                    <div class="mb-3">
+                        <i class="bi bi-credit-card text-success display-4"></i>
+                    </div>
+                    <h5 class="card-title">Multiple Payment Options</h5>
+                    <p class="card-text text-muted">Pay with credit cards, UPI, net banking, or choose cash on delivery.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card text-center bg-white p-4 rounded-3 shadow-lg h-100" style="border-radius: 20px !important;">
+                    <div class="mb-3">
+                        <i class="bi bi-headset text-info display-4"></i>
+                    </div>
+                    <h5 class="card-title">24/7 Customer Support</h5>
+                    <p class="card-text text-muted">Our expert team is always ready to help with any questions or concerns.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Categories -->
+        <div class="row g-4 mb-5">
+            <div class="col-12">
+                <h2 class="text-center text-white mb-4">Explore Our Categories</h2>
+            </div>
+
+            <div class="col-md-3">
+                <div class="category-card text-center bg-white p-3 rounded-3 shadow-lg" style="border-radius: 15px;">
+                    <i class="bi bi-phone text-primary mb-2" style="font-size: 2rem;"></i>
+                    <h6 class="mb-0">Smartphones</h6>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="category-card text-center bg-white p-3 rounded-3 shadow-lg" style="border-radius: 15px;">
+                    <i class="bi bi-laptop text-success mb-2" style="font-size: 2rem;"></i>
+                    <h6 class="mb-0">Laptops</h6>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="category-card text-center bg-white p-3 rounded-3 shadow-lg" style="border-radius: 15px;">
+                    <i class="bi bi-headphones text-info mb-2" style="font-size: 2rem;"></i>
+                    <h6 class="mb-0">Audio</h6>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="category-card text-center bg-white p-3 rounded-3 shadow-lg" style="border-radius: 15px;">
+                    <i class="bi bi-mouse text-warning mb-2" style="font-size: 2rem;"></i>
+                    <h6 class="mb-0">Accessories</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact CTA -->
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="cta-card bg-white text-center p-4 rounded-3 shadow-lg" style="border-radius: 20px;">
+                    <h4 class="mb-3">Ready to Shop?</h4>
+                    <p class="text-muted mb-4">Discover amazing deals on the latest tech products</p>
+                    <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg px-5 py-2" style="border-radius: 25px;">
+                        <i class="bi bi-shop me-2"></i>Start Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.hero-content {
+    transform: translateY(-20px);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.stat-card {
+    min-width: 100px;
+    border-radius: 10px !important;
+}
+
+.feature-card, .category-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover, .category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.cta-card {
+    animation: pulse 2s infinite;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255,255,255,0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255,255,255,0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255,255,255,0);
+    }
+}
+</style>
+{% endblock %}

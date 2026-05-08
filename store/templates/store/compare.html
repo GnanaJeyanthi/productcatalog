@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Compare Products - Product Catalog{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">Compare Products</h1>
+                <a href="{% url 'wishlist' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Wishlist
+                </a>
+            </div>
+
+            {% if products %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col" style="width: 200px;">Feature</th>
+                                {% for product in products %}
+                                    <th scope="col" class="text-center">
+                                        <div class="d-flex flex-column align-items-center">
+                                            {% if product.get_primary_image %}
+                                                <img src="{{ product.get_primary_image }}" alt="{{ product.name }}" class="img-thumbnail mb-2" style="width: 100px; height: 100px; object-fit: cover;">
+                                            {% endif %}
+                                            <strong>{{ product.name }}</strong>
+                                            <small class="text-muted">{{ product.brand.name|default:"No Brand" }}</small>
+                                        </div>
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in comparison_data %}
+                                <tr>
+                                    <th scope="row" class="bg-light">{{ row.field }}</th>
+                                    {% for value in row.values %}
+                                        <td class="text-center">
+                                            {% if row.field == 'Price' %}
+                                                <strong class="text-success">{{ value }}</strong>
+                                            {% elif row.field == 'Stock' %}
+                                                {% if 'Out of stock' in value %}
+                                                    <span class="badge bg-danger">{{ value }}</span>
+                                                {% else %}
+                                                    <span class="badge bg-success">{{ value }}</span>
+                                                {% endif %}
+                                            {% elif row.field == 'Specifications' %}
+                                                <small style="font-size: 0.85em;">{{ value|safe }}</small>
+                                            {% else %}
+                                                {{ value }}
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-center gap-3">
+                            {% for product in products %}
+                                <div class="text-center">
+                                    <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm mb-2">
+                                        <i class="fas fa-eye"></i> View {{ product.name|truncatechars:15 }}
+                                    </a>
+                                    {% if product.stock > 0 %}
+                                        <form method="post" action="{% url 'add_to_cart' product.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="next" value="{% url 'compare_products' %}">
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                <i class="fas fa-cart-plus"></i> Add to Cart
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                    <h3 class="text-muted">No products to compare</h3>
+                    <p class="text-muted">Please select products from your wishlist to compare.</p>
+                    <a href="{% url 'wishlist' %}" class="btn btn-primary">Go to Wishlist</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.table th, .table td {
+    vertical-align: middle;
+}
+.table-responsive {
+    border-radius: 0.375rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+</style>
+{% endblock %}

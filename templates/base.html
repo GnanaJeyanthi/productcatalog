@@ -1,0 +1,446 @@
+<!-- D:\2312040-wfp\productcatalog_project\templates\base.html -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>E-Store</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        /* Original Styles */
+        .product-card-img {
+            height: 200px;
+            object-fit: cover;
+        }
+        .footer-dark {
+            background-color: #212529;
+            color: #f8f9fa;
+        }
+        .footer-dark a {
+            color: #f8f9fa;
+            text-decoration: none;
+        }
+        .footer-dark a:hover {
+            text-decoration: underline;
+        }
+        .footer-dark .footer-heading {
+            font-size: 0.9rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+        .footer-dark ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        /* AI Genie Chatbot Styles */
+        #chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            font-family: 'Inter', sans-serif;
+        }
+        #chatbot-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #chatbot-button:hover { transform: scale(1.1); }
+        #chatbot-window {
+            width: 350px;
+            height: 450px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        #chatbot-header {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f8fafc;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            max-width: 80%;
+            font-size: 0.9rem;
+        }
+        .bot-message { background: #e0e7ff; align-self: flex-start; color: #3730a3; }
+        .user-message { background: #6366f1; color: white; align-self: flex-end; margin-left: auto; }
+        #chatbot-input-container {
+            padding: 10px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+        }
+        #chatbot-input {
+            flex: 1;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            padding: 5px 15px;
+            outline: none;
+        }
+        #chatbot-send {
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        /* Notification Styles */
+        .notification-toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 2000;
+            min-width: 320px;
+            background: white;
+            border-left: 6px solid #6366f1;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+            cursor: pointer;
+        }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        #noti-title { color: #312e81; font-size: 1.05rem; }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fs-4" href="{% url 'product_list' %}">
+                <i class="bi bi-shop"></i> E-Store
+            </a>
+            
+            <div class="flex-grow-1 mx-lg-3">
+                <form class="d-flex" method="GET" action="{% url 'product_list' %}">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search for products..." aria-label="Search" value="{{ search_query|default:'' }}">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+            </div>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
+                    </li>
+
+                    
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="{% url 'cart_detail' %}">
+                            <i class="bi bi-cart-fill fs-5"></i>
+                            {% if cart_item_count > 0 %}
+                            <span class="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6em;">
+                                {{ cart_item_count }}
+                                <span class="visually-hidden">items in cart</span>
+                            </span>
+                            {% endif %}
+                            <span class="d-lg-none ms-2">Cart</span>
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-5"></i>
+                            <span class="ms-1">{{ user.username }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <li><a class="dropdown-item" href="{% url 'profile_view' %}"><i class="bi bi-person"></i> My Profile</a></li>
+                            {% if not user.is_staff %}
+                            <li><a class="dropdown-item" href="{% url 'my_orders' %}"><i class="bi bi-bag-check"></i> My Orders</a></li>
+                            {% endif %}
+                            {% if not user.is_staff %}
+                            <li><a class="dropdown-item" href="{% url 'wishlist' %}"><i class="bi bi-heart"></i> My Wishlist</a></li>
+                            {% endif %}
+                            {% if user.is_staff %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'add_product' %}"><i class="bi bi-plus-circle"></i> Add Product</a></li>
+                            <li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="bi bi-gear"></i> Admin Panel</a></li>
+                            <li><a class="dropdown-item" href="{% url 'my_orders' %}"><i class="bi bi-bag-check"></i> View All Orders</a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary btn-sm text-white" href="{% url 'register' %}">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages Display -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <main class="container my-4 flex-grow-1">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer-dark pt-5 pb-4">
+        <div class="container text-md-start">
+            <div class="row gy-4">
+                <div class="col-lg-2 col-md-4 col-6">
+                    <h6 class="footer-heading mb-3">About</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Contact Us</a></li>
+                        <li class="mb-2"><a href="#">About Us</a></li>
+                        <li class="mb-2"><a href="#">Careers</a></li>
+                        <li class="mb-2"><a href="#">Stories</a></li>
+                        <li class="mb-2"><a href="#">Press</a></li>
+                        <li class="mb-2"><a href="#">Corporate Info</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <h6 class="footer-heading mb-3">Group Companies</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Myntra</a></li>
+                        <li class="mb-2"><a href="#">Cleartrip</a></li>
+                        <li class="mb-2"><a href="#">Shopsy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <h6 class="footer-heading mb-3">Help</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Payments</a></li>
+                        <li class="mb-2"><a href="#">Shipping</a></li>
+                        <li class="mb-2"><a href="#">Cancellation & Returns</a></li>
+                        <li class="mb-2"><a href="#">FAQ</a></li>
+                        <li class="mb-2"><a href="#">Grievance Redressal</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                    <h6 class="footer-heading mb-3">Consumer Policy</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Cancellation & Returns</a></li>
+                        <li class="mb-2"><a href="#">Terms Of Use</a></li>
+                        <li class="mb-2"><a href="#">Security</a></li>
+                        <li class="mb-2"><a href="#">Privacy</a></li>
+                        <li class="mb-2"><a href="#">Sitemap</a></li>
+                        <li class="mb-2"><a href="#">EPR Compliance</a></li>
+                    </ul>
+                </div>
+                <hr class="d-md-none text-muted">
+                <div class="col-lg-2 col-md-4">
+                    <h6 class="footer-heading mb-3">Mail Us</h6>
+                    <address class="mb-0" style="font-style: normal; font-size: 0.9rem;">
+                        E-catalogue Internet Private Limited,
+                        Buildings Alyssa, Begonia &
+                        Clove Embassy Tech Village,
+                        Outer Ring Road, Devarabeesanahalli Village,
+                        Bengaluru, 560103,
+                        Karnataka, India
+                    </address>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <h6 class="footer-heading mb-3">Registered Office</h6>
+                    <address class="mb-0" style="font-style: normal; font-size: 0.9rem;">
+                        E-catalogue Internet Private Limited,
+                        Buildings Alyssa, Begonia &
+                        Clove Embassy Tech Village,
+                        Outer Ring Road, Devarabeesanahalli Village,
+                        Bengaluru, 560103,
+                        Karnataka, India
+                        <br><br>
+                        CIN : U51109KA2012PTC066107
+                    </address>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-auto mb-2 mb-md-0">
+                    <span class="me-3"><i class="bi bi-briefcase-fill"></i> Become a Seller</span>
+                    <span class="me-3"><i class="bi bi-star-fill"></i> Advertise</span>
+                    <span class="me-3"><i class="bi bi-gift-fill"></i> Gift Cards</span>
+                    <span class="me-3"><i class="bi bi-question-circle-fill"></i> Help Center</span>
+                </div>
+                <div class="col-md-auto mb-2 mb-md-0">
+                    <span>© 2025 e-commerce.com</span>
+                </div>
+                <div class="col-md text-md-end">
+                    <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/payment-method-c454fb.svg" alt="Payment Methods">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AI & Tracking Scripts -->
+    <div id="chatbot-container">
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>Retail Genie 🧞</span>
+                <button class="btn btn-sm text-white" onclick="toggleChatbot()"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div id="chatbot-messages" class="d-flex flex-column">
+                <div class="message bot-message">Hi! I'm your Retail Genie. Ask me for recommendations or deals!</div>
+            </div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Type something...">
+                <button id="chatbot-send"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+        <button id="chatbot-button" onclick="toggleChatbot()">
+            <i class="bi bi-chat-dots-fill"></i>
+        </button>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="ai-notification" class="notification-toast">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <strong id="noti-title">Title</strong>
+                <p id="noti-msg" class="mb-0 small text-muted">Message goes here</p>
+            </div>
+            <button class="btn-close" onclick="document.getElementById('ai-notification').style.display='none'"></button>
+        </div>
+        <div class="mt-2 text-end">
+            <button class="btn btn-sm btn-primary" onclick="handleNotificationAction()">View Details</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Behavior Tracking ---
+        function trackEvent(productId, actionType, duration = 0) {
+            fetch('/api/track/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+                body: JSON.stringify({ product_id: productId, action_type: actionType, duration: duration })
+            }).catch(err => console.error('Tracking failed', err));
+        }
+
+        // --- Chatbot Logic ---
+        function toggleChatbot() {
+            const win = document.getElementById('chatbot-window');
+            win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        document.getElementById('chatbot-send').onclick = function() {
+            const input = document.getElementById('chatbot-input');
+            const msg = input.value.trim();
+            if(!msg) return;
+
+            const messages = document.getElementById('chatbot-messages');
+            messages.innerHTML += `<div class="message user-message">${msg}</div>`;
+            input.value = '';
+
+            fetch('/api/chatbot/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+                body: JSON.stringify({ query: msg })
+            })
+            .then(res => res.json())
+            .then(data => {
+                let html = `<div class="message bot-message">${data.message}</div>`;
+                if(data.products && data.products.length > 0) {
+                    html += '<div class="row g-2 mt-2">';
+                    data.products.forEach(p => {
+                        html += `
+                            <div class="col-6">
+                                <div class="card h-100 p-1" style="font-size: 0.7rem;">
+                                    <img src="${p.image}" class="card-img-top" style="height: 50px; object-fit: cover;">
+                                    <div class="card-body p-1">
+                                        <div class="fw-bold text-truncate">${p.name}</div>
+                                        <div>₹${p.price}</div>
+                                        <a href="${p.url}" class="stretched-link"></a>
+                                    </div>
+                                </div>
+                            </div>`;
+                    });
+                    html += '</div>';
+                }
+                messages.innerHTML += html;
+                messages.scrollTop = messages.scrollHeight;
+            });
+        };
+
+        // --- Push Notification Simulation ---
+        function checkNotifications() {
+            fetch('/api/notifications/')
+                .then(res => {
+                    if(!res.ok) return {};
+                    return res.json();
+                })
+                .then(data => {
+                    if(data && data.notifications && data.notifications.length > 0) {
+                        const n = data.notifications[0];
+                        document.getElementById('noti-title').innerText = n.title;
+                        document.getElementById('noti-msg').innerText = n.message;
+                        document.getElementById('ai-notification').style.display = 'block';
+                        
+                        // Mark as read immediately for the demo
+                        fetch(`/api/notifications/mark-read/${n.id}/`, { method: 'POST' });
+                    }
+                });
+        }
+
+        if("{{ user.is_authenticated }}" === "True") {
+            checkNotifications(); // Call immediately
+            setInterval(checkNotifications, 5000); // Check every 5s
+        }
+
+        function handleNotificationAction() {
+            window.location.href = "{% url 'cart_detail' %}";
+        }
+    </script>
+</body>
+</html>

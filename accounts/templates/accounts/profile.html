@@ -1,0 +1,147 @@
+ok{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-user"></i> My Profile
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if profile %}
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h5>Profile Status</h5>
+                                <p class="mb-2">
+                                    <span class="badge bg-{% if profile.profile_completed %}success{% else %}warning{% endif %}">
+                                        {% if profile.profile_completed %}Complete{% else %}Incomplete{% endif %}
+                                    </span>
+                                </p>
+                                {% if profile.is_college_student %}
+                                    <p class="mb-2">
+                                        <span class="badge bg-info">
+                                            <i class="fas fa-graduation-cap"></i> College Student
+                                        </span>
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <small class="text-muted">
+                                    Member since: {{ profile.created_at|date:"M d, Y" }}
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <h5>Profile Details</h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Full Name:</strong> {{ profile.name }}</p>
+                                        <p><strong>Email:</strong> {{ profile.email }}</p>
+                                        <p><strong>Phone:</strong> {{ profile.phone }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Address:</strong> {{ profile.address }}</p>
+                                        <p><strong>District:</strong> {{ profile.district }}</p>
+                                        <p><strong>State:</strong> {{ profile.state }}</p>
+                                        <p><strong>Country:</strong> {{ profile.country }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">Full Name</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger small">{{ form.name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">Email Address</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.phone.id_for_label }}" class="form-label">Phone Number</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}
+                                    <div class="text-danger small">{{ form.phone.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.country.id_for_label }}" class="form-label">Country</label>
+                                {{ form.country }}
+                                <small class="text-muted">Default: India</small>
+                                {% if form.country.errors %}
+                                    <div class="text-danger small">{{ form.country.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.state.id_for_label }}" class="form-label">State</label>
+                                {{ form.state }}
+                                {% if form.state.errors %}
+                                    <div class="text-danger small">{{ form.state.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.district.id_for_label }}" class="form-label">District</label>
+                                {{ form.district }}
+                                {% if form.district.errors %}
+                                    <div class="text-danger small">{{ form.district.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.address.id_for_label }}" class="form-label">Address</label>
+                            {{ form.address }}
+                            {% if form.address.errors %}
+                                <div class="text-danger small">{{ form.address.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Profile
+                            </button>
+                            <a href="{% url 'product_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Products
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

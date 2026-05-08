@@ -1,0 +1,59 @@
+<!-- D:\2312040-wfp\productcatalog_project\accounts\templates\accounts\register.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Register</h2>
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Username</label>
+                            <input type="text" name="username" maxlength="150" autofocus autocapitalize="none" autocomplete="username" required id="id_username" class="form-control">
+                            <small class="form-text text-muted">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+                            {% if form.username.errors %}
+                                {% for error in form.username.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_password1" class="form-label">Password</label>
+                            <input type="password" name="password1" autocomplete="new-password" required id="id_password1" class="form-control">
+                            <small class="form-text text-muted">Your password must contain at least 8 characters and can't be entirely numeric.</small>
+                            {% if form.password1.errors %}
+                                {% for error in form.password1.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_password2" class="form-label">Password confirmation</label>
+                            <input type="password" name="password2" autocomplete="new-password" required id="id_password2" class="form-control">
+                            <small class="form-text text-muted">Enter the same password as before, for verification.</small>
+                            {% if form.password2.errors %}
+                                {% for error in form.password2.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </form>
+                    <p class="text-center mt-3">
+                        Already have an account? <a href="{% url 'login' %}">Login here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

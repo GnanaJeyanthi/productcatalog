@@ -1,0 +1,120 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+  {{ media }}
+  <style>
+    /* --- Custom Admin Enhancements --- */
+    .form-section {
+      border: 1px solid #2c3e50;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      background-color: #111;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    .form-section h3 {
+      margin-top: 0;
+      color: #81d4fa;
+      font-weight: 600;
+      border-bottom: 1px solid #444;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+    }
+
+    textarea[name="specs"] {
+      font-family: monospace;
+      background: #1a1a1a;
+      color: #b2ebf2;
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 100px;
+    }
+
+    .form-row {
+      margin-bottom: 15px !important;
+    }
+
+    .inline-group {
+      background-color: #0d1117;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+
+    .inline-group h2 {
+      color: #81d4fa;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+  <form {% if has_file_field %}enctype="multipart/form-data"{% endif %}
+        action="{{ form_url }}" method="post" id="{{ opts.model_name }}_form" novalidate>
+    {% csrf_token %}
+
+    {% if errors %}
+      <p class="errornote">
+        {% if errors|length == 1 %}
+          {% trans "Please correct the error below." %}
+        {% else %}
+          {% trans "Please correct the errors below." %}
+        {% endif %}
+      </p>
+      <ul class="errorlist">{{ errors }}</ul>
+    {% endif %}
+
+    <!-- Section 1: Basic Information -->
+    <div class="form-section">
+      <h3>🧾 Basic Information</h3>
+      {% for fieldset in adminform %}
+        {% if forloop.counter <= 1 %}
+          {% include "admin/includes/fieldset.html" %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Section 2: Specifications -->
+    <div class="form-section">
+      <h3>⚙️ Specifications</h3>
+      <script>
+        // Auto-clear "null" from specs
+        document.addEventListener('DOMContentLoaded', function() {
+          const specs = document.querySelector('textarea[name="specs"]');
+          if (specs && specs.value.trim() === 'null') specs.value = '';
+        });
+      </script>
+      {% for fieldset in adminform %}
+        {% if forloop.counter == 2 %}
+          {% include "admin/includes/fieldset.html" %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Section 3: Pricing and Stock -->
+    <div class="form-section">
+      <h3>💰 Pricing & Stock</h3>
+      {% for fieldset in adminform %}
+        {% if forloop.counter == 3 %}
+          {% include "admin/includes/fieldset.html" %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Inline Images (if any) -->
+    {% for inline_admin_formset in inline_admin_formsets %}
+      <div class="form-section">
+        <h3>🖼️ {{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h3>
+        {% include inline_admin_formset.opts.template %}
+      </div>
+    {% endfor %}
+
+    {% submit_row %}
+  </form>
+</div>
+{% endblock %}

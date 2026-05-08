@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-success">
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h2 class="text-success mb-3">Order Placed Successfully!</h2>
+                    <p class="lead text-muted mb-4">Thank you for your order. Your order has been confirmed and is being processed.</p>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Order Details</h6>
+                                    <p class="mb-1"><strong>Order ID:</strong> #{{ order.id }}</p>
+                                    <p class="mb-1"><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+                                    <p class="mb-1"><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+                                    <p class="mb-0"><strong>Status:</strong> {{ order.get_status_display }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Shipping Address</h6>
+                                    <p class="mb-1">{{ order.full_name }}</p>
+                                    <p class="mb-1">{{ order.address }}</p>
+                                    <p class="mb-1">{{ order.city }}, {{ order.state }} - {{ order.pincode }}</p>
+                                    <p class="mb-0">{{ order.phone }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info" role="alert">
+                        <i class="bi bi-info-circle"></i> You will receive an email confirmation shortly with your order details.
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'my_orders' %}" class="btn btn-primary">
+                            <i class="bi bi-list-ul"></i> View My Orders
+                        </a>
+                        <a href="{% url 'product_list' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-shop"></i> Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
